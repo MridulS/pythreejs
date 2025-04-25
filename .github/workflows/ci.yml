@@ -134,7 +134,7 @@ jobs:
   test:
     name: test ${{ matrix.os }}${{ matrix.python }} ${{ matrix.node }} ${{ matrix.lab }}
     needs: [build]
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
