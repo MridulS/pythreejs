@@ -48,7 +48,7 @@ jobs:
     - name: Install packaging dependencies
       run: |
         set -eux
-        python -m pip install -vv 'jupyterlab>4'
+        python -m pip install -vv 'jupyterlab~=4.0'
     - name: Pre-install node dependencies
       run: |
         set -eux
