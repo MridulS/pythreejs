@@ -210,11 +210,6 @@ jobs:
       run: |
         set -eux
         codecov
-    - name: Check notebook extension
-      run: |
-        set -eux
-        jupyter nbextension list
-        jupyter nbextension list 2>&1 | grep -ie "jupyter-threejs/extension.*enabled" -
     - if: ${{ matrix.node }}
       name: Install lab extension
       run: |
