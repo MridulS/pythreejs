@@ -159,12 +159,6 @@ jobs:
           - python: 3.13
             dist: 'pythreejs*.whl'
             lab: 4
-          - os: windows
-            py_cmd: python
-          - os: macos
-            py_cmd: python3
-          - os: ubuntu
-            py_cmd: python
     steps:
     - name: Check out
       uses: actions/checkout@v4
@@ -185,33 +179,33 @@ jobs:
     - name: Install installation dependencies
       run: |
         set -eux
-        ${{ matrix.py_cmd }} -m pip install -vv --user -U pip wheel setuptools
+        python -m pip install -vv --user -U pip wheel setuptools
     - name: Install package
       run: |
         set -eux
         cd dist
-        ${{ matrix.py_cmd }} -m pip install -vv ${{ matrix.dist }}
+        python -m pip install -vv ${{ matrix.dist }}
     - name: Validate environment
       run: |
         set -eux
-        ${{ matrix.py_cmd }} -m pip freeze
-        ${{ matrix.py_cmd }} -m pip check
+        python -m pip freeze
+        python -m pip check
     - if: ${{ matrix.lab }}
       name: Install JupyterLab
       run: |
         set -eux
-        ${{ matrix.py_cmd }} -m pip install -vv 'jupyterlab==${{ matrix.lab }}.*'
+        python -m pip install -vv 'jupyterlab==${{ matrix.lab }}.*'
     - name: Install test dependencies
       # explicit file installs don't support extras, skimage brings most along
       run: |
         set -eux
-        ${{ matrix.py_cmd }} -m pip install -vv nbval scikit-image ipywebrtc pytest-cov codecov matplotlib
+        python -m pip install -vv nbval scikit-image ipywebrtc pytest-cov codecov matplotlib
     - name: Run python tests
       # remove the source directory to avoid surprises
       run: |
         set -eux
         rm -rf pythreejs
-        ${{ matrix.py_cmd }} -m pytest -vv -l --nbval-lax --current-env . --cov pythreejs --cov-report term-missing:skip-covered --no-cov-on-fail
+        python -m pytest -vv -l --nbval-lax --current-env . --cov pythreejs --cov-report term-missing:skip-covered --no-cov-on-fail
     - name: Upload coverage
       run: |
         set -eux
