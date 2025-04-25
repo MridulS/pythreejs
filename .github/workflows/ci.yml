@@ -23,17 +23,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Set up python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
     - name: Set up node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
-        node-version: 14.x
+        node-version: 22.x
     - name: Cache pip packages
-      uses: actions/cache@v1
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: |
@@ -65,7 +65,7 @@ jobs:
         cd dist
         sha256sum * | tee SHA256SUMS
     - name: Upload distributions
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: dist ${{ github.run_number }}
         path: ./dist
@@ -75,13 +75,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Install apt dependencies
         run: |
           set -eux
           sudo apt install pandoc
       - name: Set up python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
       - name: Install installation dependencies
@@ -89,9 +89,9 @@ jobs:
           set -eux
           python -m pip install -vv -U --user pip wheel setuptools
       - name: Set up node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 14.x
+          node-version: 22.x
       - name: Install package and docs dependencies
         run: |
           set -eux
@@ -107,7 +107,7 @@ jobs:
           cd docs
           make html
       - name: Upload docs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: docs ${{ github.run_number }}
           path: ./docs/build
@@ -117,7 +117,7 @@ jobs:
           echo "::set-output name=year::$(date +'%Y')"
           echo "::set-output name=week::$(date +'%U')"
       - name: Cache links
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ./build/links
           key: |
@@ -139,23 +139,26 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python: [3.7, 3.8, 3.9, 3.10]
+        python: [3.9, 3.10, 3.11, 3.12, 3.13]
         include:
-          - python: 3.7
-            dist: 'pythreejs*.tar.gz'
-            node: 14
-            lab: 2
-          - python: 3.8
-            dist: 'pythreejs*.whl'
-            node: 14
-            lab: 2
           - python: 3.9
-            node: 16
             dist: 'pythreejs*.whl'
-            lab: 3
+            node: 22
+            lab: 4
           - python: 3.10
             dist: 'pythreejs*.whl'
-            lab: 3
+            node: 22
+            lab: 4
+          - python: 3.11
+            node: 22
+            dist: 'pythreejs*.whl'
+            lab: 4
+          - python: 3.12
+            dist: 'pythreejs*.whl'
+            lab: 4
+          - python: 3.13
+            dist: 'pythreejs*.whl'
+            lab: 4
           - os: windows
             py_cmd: python
           - os: macos
@@ -164,18 +167,18 @@ jobs:
             py_cmd: python
     steps:
     - name: Check out
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Set up python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.8
+        python-version: 3.9
     - if: ${{ matrix.node }}
       name: Set up node
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node }}
     - name: Download distributions
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: dist ${{ github.run_number }}
         path: ./dist
